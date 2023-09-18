@@ -5,7 +5,7 @@ import json
 import pytz  
 
 moscow_tz = pytz.timezone('Europe/Moscow')
-bot = telebot.TeleBot(' ')
+bot = telebot.TeleBot('')
 
 # JSON
 def read_json_file(filename):
@@ -52,19 +52,12 @@ def get_text_messages(message):
         parsed_data = read_json_file(filename)
         if parsed_data:
             try:
-                if nowDay == "Суббота" or "Воскресенье":
-                    monday_schedule = parsed_data[nowParity]["Понедельник"]
-                    text_schedule = ""
-                    for key, value in monday_schedule.items():
-                        text_schedule += f"{key}: {value}\n"
-                    bot.send_message(message.chat.id, f"{message.from_user.username}, Расписание на понедельник:\n\n{text_schedule}")
-                else:
-                    monday_schedule = parsed_data[nowParity][nowDay]
-                    text_schedule = ""
-                    for key, value in monday_schedule.items():
-                        text_schedule += f"{key}: {value}\n"
-                    bot.send_message(message.chat.id, f"{message.from_user.username}, Расписание на {nowDay}:\n\n{text_schedule}")
-                    print(f"[{datetime.datetime.now()}] Пользователь {message.from_user.username}[id: {message.from_user.id}] использовал команду Расписание")
+                monday_schedule = parsed_data[nowParity][nowDay]
+                text_schedule = ""
+                for key, value in monday_schedule.items():
+                    text_schedule += f"{key}: {value}\n"
+                bot.send_message(message.chat.id, f"{message.from_user.username}, Расписание на {nowDay} ({nowParity}):\n\n{text_schedule}")
+                print(f"[{datetime.datetime.now()}] Пользователь {message.from_user.username}[id: {message.from_user.id}] использовал команду Расписание")
             except KeyError:
                 print(f"[{datetime.datetime.now()}] Пользователь {message.from_user.username}[id: {message.from_user.id}] использовал команду Замены")
                 print(f"[{datetime.datetime.now()}] Данные о расписании на день не были получены, ошибка")
